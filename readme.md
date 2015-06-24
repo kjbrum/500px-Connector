@@ -12,22 +12,22 @@
 - Create a shortcode (with the below options)
 - Allow the user to set default options for widgets and shortcodes
 - Options
- - Stream Type
-   - Popular
-   - Upcoming
-   - Editors' Choice
-   - Fresh (today, yesterday, this week)
-   - User (friends, favorites)
-   - Tag
-   - Category
- - Sorting
-   - Time of upload
-   - Rating
-   - View count
-   - Vote count
-   - Favorite count
-   - Comment count
-   - Original date
+  - Stream Type
+    - Popular
+    - Upcoming
+    - Editors' Choice
+    - Fresh (today, yesterday, this week)
+    - User (friends, favorites)
+    - Tag
+    - Category
+  - Sorting
+    - Time of upload
+    - Rating
+    - View count
+    - Vote count
+    - Favorite count
+    - Comment count
+    - Original date
 
 
 ### Changelog
