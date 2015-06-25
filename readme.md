@@ -8,26 +8,14 @@
 
 ### To-Do
 
-- Create a widget (with the below options)
-- Create a shortcode (with the below options)
+- Let users choose from default display formats or add a way for them to make their own
+- Create a widget (with options)
+   - Extra options for what info to return?
+- Create a shortcode (with options)
+   - Extra options for what info to return?
 - Allow the user to set default options for widgets and shortcodes
-- Options
-  - Stream Type
-    - Popular
-    - Upcoming
-    - Editors' Choice
-    - Fresh (today, yesterday, this week)
-    - User (friends, favorites)
-    - Tag
-    - Category
-  - Sorting
-    - Time of upload
-    - Rating
-    - View count
-    - Vote count
-    - Favorite count
-    - Comment count
-    - Original date
+   - Exclude certain categories ("Nude" & per photo "nsfw": true)
+- Make a list of what options can we used, and what can be used together (i.e. feature="user", username="kjbrum")
 
 
 ### Changelog

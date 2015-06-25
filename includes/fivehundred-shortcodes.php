@@ -20,53 +20,79 @@ class FiveHundred_Shortcodes {
      * @return  string  $feed     Feed HTML
      */
     function display_feed( $atts, $content ) {
-        // Extract the attributes
-        extract( shortcode_atts( array(
-            'search' => ''
-        ), $atts ) );
 
-        $photos = $this->get_photos($search);
+        if($atts['search']) {
+            $atts['term'] = $atts['search'];
+            unset($atts['search']);
+        }
+
+        if($atts['count']) {
+            $atts['rpp'] = $atts['count'];
+            unset($atts['count']);
+        }
+
+        if($atts['categories']) {
+            $atts['only'] = $atts['categories'];
+            unset($atts['categories']);
+        }
+
+        if($atts['exclude_categories']) {
+            $atts['exclude'] = $atts['exclude_categories'];
+            unset($atts['exclude_categories']);
+        }
+
+        if($atts['username']) {
+            $atts['feature'] = 'user';
+        }
+
+        // Check for global options
+
+        // Extract the attributes
+        $atts = shortcode_atts( array(
+            'feature'        => 'fresh_today',
+            'term'           => '',
+            'username'       => '',
+            'only'           => '',
+            'exclude'        => '',
+            'sort'           => 'created_at',
+            'sort_direction' => 'desc',
+            'page'           => '1',
+            'rpp'            => '10',
+            'image_size'     => '3',
+            'include_store'  => '0',
+            'include_states' => '0',
+            'tags'           => '1'
+        ), $atts );
+
+        $photos = $this->get_photos( array_filter( $atts ) );
 
         $feed = '';
-        $feed .= "<h4>500px Connector Feed - {$search}</h4>";
+        $feed .= "<h4>500px Connector Feed</h4>";
 
         foreach($photos as $photo) {
-            $feed .= "<div style='width: 50%; float: left; margin-bottom: 2rem;'><a href='{$photo['url']}' target='_blank'>{$photo['title']}<br><img src='{$photo['thumbnail']}'></a></div>";
+            $feed .= "<div style='width: 50%; float: left; margin-bottom: 2rem;'><a href='http://500px.com/{$photo['url']}' target='_blank'>{$photo['name']}<br><img src='{$photo['image_url']}'></a></div>";
         }
 
         return $feed;
     }
 
-    function get_photos( $search ) {
-        $url = 'https://api.500px.com/v1/photos/search?term=' .$search. '&image_size=3&consumer_key=' .$this->consumer_key;
+    function get_photos( $data ) {
+
+        $query = http_build_query( $data );
+        if( $data['term'] ) {
+            $url = 'https://api.500px.com/v1/photos/search?' .$query. '&consumer_key=' .$this->consumer_key;
+        } else {
+            $url = 'https://api.500px.com/v1/photos?' .$query. '&consumer_key=' .$this->consumer_key;
+        }
 
         $response = wp_remote_get( $url );
 
         $data = json_decode( $response['body'], true );
 
         if( $data['photos'] ) {
-            $photo_data = array();
-            foreach( $data['photos'] as $key => $val ) {
-                $photo_data[] = array(
-                    'id'            => $val['id'],
-                    'url'           => 'http://500px.com'.$val['url'],
-                    'title'         => $val['name'],
-                    'description'   => $val['description'],
-                    'author'        => $val['user']['fullname'],
-                    'thumbnail'     => $val['image_url'],
-                    'camera'        => $val['camera'],
-                    'lens'          => $val['lens'],
-                    'focal_length'  => $val['focal_length'],
-                    'iso'           => $val['iso'],
-                    'shutter_speed' => $val['shutter_speed'],
-                    'aperture'      => $val['aperture']
-                );
-            }
-
-            return $photo_data;
-        }
-        else {
-            return 'No '.$search.' photos found. Please try a new search term.';
+            return $data['photos'];
+        } else {
+            return 'No photos meet your criteria.';
         }
     }
 }
