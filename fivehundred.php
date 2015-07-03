@@ -27,8 +27,9 @@ class FiveHundred {
         $this->consumer_key = get_option( 'fivehundred_consumer_key' );
 
 
-        // Require the shortcodes and functions
+        // Require the the goods
         require_once( 'includes/fivehundred-shortcodes.php' );
+        require_once( 'includes/fivehundred-widget.php' );
         require_once( 'fivehundred-functions.php' );
 
         // Require our admin files
@@ -39,6 +40,11 @@ class FiveHundred {
 
         // Create our plugin page
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
+        add_action( 'widgets_init', array( $this, 'register_widget' ) );
+    }
+    
+    public function register_widget() {
+        register_widget( 'FiveHundred_Widget' );
     }
 
     /**
