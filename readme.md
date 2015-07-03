@@ -15,7 +15,7 @@
    - Extra options for what info to return?
 - Allow the user to set default options for widgets and shortcodes
    - Exclude certain categories ("Nude" & per photo "nsfw": true)
-- Make a list of what options can we used, and what can be used together (i.e. feature="user", username="kjbrum")
+- Make a list of what options can be used, and what can be used together (i.e. feature="user", username="kjbrum")
 
 
 ### Changelog
