@@ -82,7 +82,7 @@ class FiveHundred_Shortcodes {
     function get_photos( $data ) {
 
         $query = http_build_query( $data );
-        if( $data['term'] ) {
+        if( !empty( $data['term'] ) ) {
             $url = 'https://api.500px.com/v1/photos/search?' .$query. '&consumer_key=' .$this->consumer_key;
         } else {
             $url = 'https://api.500px.com/v1/photos?' .$query. '&consumer_key=' .$this->consumer_key;
@@ -92,7 +92,7 @@ class FiveHundred_Shortcodes {
 
         $data = json_decode( $response['body'], true );
 
-        if( $data['photos'] ) {
+        if( !empty( $data['photos'] ) ) {
             return $data['photos'];
         } else {
             return apply_filters( 'fivehundred_shortcode_no_results', 'No photos meet your criteria.' );
