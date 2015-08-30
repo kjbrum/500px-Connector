@@ -25,6 +25,12 @@
 - Allow the user to set default options for widgets and shortcodes
    - Exclude certain categories ("Nude" & per photo "nsfw": true)
 - Make a list of what options can be used, and what can be used together (i.e. feature="user", username="kjbrum")
+- Add some JS for showing/hiding certain fields when certain fields are filled, as well as setting values (i.e. username="kjbrum" => feature="user", hide "search" field)
 
+
+### Notes
+
+- Username and search can't be used together
+- Username makes "feature" = "user"
 
 ### Changelog

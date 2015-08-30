@@ -53,7 +53,7 @@ class FiveHundred_Shortcodes {
             'only'           => '',
             'exclude'        => '',
             'sort'           => '',
-            'sort_direction' => '',
+            'sort_direction' => 'desc',
             'page'           => '',
             'rpp'            => '10',
             'image_size'     => '3',
