@@ -155,7 +155,7 @@ class FiveHundred_Widget extends WP_Widget {
         <p>
             <label for="<?php echo $this->get_field_id( 'sort' ); ?>">Sort by:</label>
             <select id="<?php echo $this->get_field_name( 'sort' ); ?>" name="<?php echo $this->get_field_name( 'sort' ); ?>">
-                <option value=""></option>
+                <option value="">Default</option>
                 <?php foreach( $sort_options as $key => $val ) : ?>
                     <option value="<?php echo $key; ?>" <?php echo (esc_attr($sort) == $key)?'selected="selected"':''; ?>><?php echo $val; ?></option>
                 <?php endforeach; ?>

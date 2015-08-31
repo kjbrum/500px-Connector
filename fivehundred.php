@@ -42,7 +42,7 @@ class FiveHundred {
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
         add_action( 'widgets_init', array( $this, 'register_widget' ) );
     }
-    
+
     public function register_widget() {
         register_widget( 'FiveHundred_Widget' );
     }
@@ -72,15 +72,14 @@ class FiveHundred {
             <h2>500px Connector</h2>
 
             <?php
-                // Check if the form has been submitted
-                $this->handle_form_submission();
+                // Check if the consumer key form has been submitted
+                $this->handle_consumer_key_form_submission();
                 $key = $this->consumer_key;
             ?>
-
             <h3 class="title">Authorization</h3>
             <p>Enter your consumer key to authorize with the 500px API. Need a consumer key? <a href="https://500px.com/settings/applications" target="_blank">Register Here</a></p>
             <form  method="post" enctype="multipart/form-data">
-                <?php wp_nonce_field( 'credential-authorization' ); ?>
+                <?php wp_nonce_field( 'fivehundred-credential-authorization' ); ?>
                 <table class="form-table">
                     <tbody>
                         <tr>
@@ -94,16 +93,63 @@ class FiveHundred {
 
                 <?php submit_button( 'Connect' ) ?>
             </form>
+
+            <hr>
+
+            <?php
+                // Check if the layout form has been submitted
+                $this->handle_layout_form_submission();
+                $key = $this->consumer_key;
+            ?>
+            <h3 class="title">Defaults</h3>
+            <p>Set default sitewide options to use.</p>
+            <form  method="post" enctype="multipart/form-data">
+                <?php wp_nonce_field( 'fivehundred-default-options' ); ?>
+                <h4>Layout</h4>
+                <table class="form-table">
+                    <tbody>
+                        <tr>
+                            <td style="width:25%">
+                                <input type="radio" id="default_layout[layout_1]" name="default_layout" value="layout_1">
+                                <label for="default_layout[layout_1]">
+                                    <img src="<?php echo plugin_dir_url( __FILE__ ); ?>/assets/images/layout1.png" alt="layout1">
+                                </label>
+                            </td>
+                            <td style="width:25%">
+                                <input type="radio" id="default_layout[layout_2]" name="default_layout" value="layout_2">
+                                <label for="default_layout[layout_2]">
+                                    <img src="<?php echo plugin_dir_url( __FILE__ ); ?>/assets/images/layout2.png" alt="layout2">
+                                </label>
+                            </td>
+                            <td style="width:25%">
+                                <input type="radio" id="default_layout[layout_3]" name="default_layout" value="layout_3">
+                                <label for="default_layout[layout_3]">
+                                    <img src="<?php echo plugin_dir_url( __FILE__ ); ?>/assets/images/layout3.png" alt="layout3">
+                                </label>
+                            </td>
+                            <td style="width:25%">
+                                <input type="radio" id="default_layout[layout_4]" name="default_layout" value="layout_4">
+                                <label for="default_layout[layout_4]">
+                                    <img src="<?php echo plugin_dir_url( __FILE__ ); ?>/assets/images/layout4.png" alt="layout4">
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <?php submit_button( 'Save' ) ?>
+            </form>
+
         </div>
     <?php
     }
 
     /**
-     *  Handle the uploading of an SVG
+     *  Handle saving the consumer key
      *
      *  @return  void
      */
-    public function handle_form_submission() {
+    public function handle_consumer_key_form_submission() {
         $key = $this->consumer_key;
 
         // Remove consumer key if empty
@@ -125,7 +171,7 @@ class FiveHundred {
         // Check if the consumer key has been entered
         if( isset( $_POST['consumer_key'] ) && ( $key != $_POST['consumer_key'] ) ) {
             // Check for nonce
-            check_admin_referer( 'credential-authorization' );
+            check_admin_referer( 'fivehundred-credential-authorization' );
 
             // Update the options
             $updated = update_option( 'fivehundred_consumer_key', $_POST['consumer_key'] );
