@@ -90,6 +90,7 @@ function fivehundred_build_output( $photos ) {
                             '{{image_url}}'        => $photo['image_url'],
                             '{{tags}}'             => implode( ', ', $photo['tags'] ),
                             '{{author}}'           => $photo['user']['fullname'],
+                            '{{author.url}}'       => 'http://500px.com/'.$photo['user']['username'],
                             '{{author.username}}'  => $photo['user']['username'],
                             '{{author.image}}'     => $photo['user']['userpic_url'],
                             '{{author.followers}}' => $photo['user']['followers_count']

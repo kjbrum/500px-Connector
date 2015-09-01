@@ -17,6 +17,7 @@
 
 ### To-Do
 
+- Add a textarea to add custom default layout CSS
 - Add in some filters and actions to make it more extensible
 - Allow the user to set default options for widgets and shortcodes
    - Exclude certain categories ("Nude" & per photo "nsfw": true)
