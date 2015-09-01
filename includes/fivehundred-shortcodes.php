@@ -9,7 +9,7 @@ class FiveHundred_Shortcodes {
         /**
          * Add the SVG shortcode
          */
-        add_shortcode( 'fivehundred', array( $this, 'display_feed' ) );
+        add_shortcode( 'fivehundred', array( $this, 'fivehundred_display_feed' ) );
     }
 
     /**
@@ -19,7 +19,7 @@ class FiveHundred_Shortcodes {
      * @param   string  $content  Content between the brackets
      * @return  string  $feed     Feed HTML
      */
-    function display_feed( $atts, $content ) {
+    function fivehundred_display_feed( $atts, $content ) {
 
         if( !empty( $atts['search'] ) ) {
             $atts['term'] = $atts['search'];
@@ -63,40 +63,11 @@ class FiveHundred_Shortcodes {
             'heading'        => ''
         ), $atts );
 
-        $photos = $this->get_photos( array_filter( $atts ) );
+        $photos = fivehundred_query_photos( array_filter( $atts ) );
 
-        $feed = "<div class='fivehundred-container'>
-                    <ul class='fivehundred-items'>";
-                        foreach($photos as $photo) {
-                            $feed .= "<li class='fivehundred-item'>";
-                                        $item_info = "<a href='http://500px.com/{$photo['url']}' target='_blank'>{$photo['name']}<br><img src='{$photo['image_url']}'></a>";
-                                        $feed .= apply_filters( 'fivehundred_shortcode_item_contents', $item_info, $photo );
-                                    $feed .= '</li>';
-                        }
-            $feed .= '</ul>';
-        $feed .= '</div>';
+        $output = fivehundred_build_output( $photos );
 
-        return apply_filters( 'fivehundred_shortcode_contents', $feed, $photos );
-    }
-
-    function get_photos( $data ) {
-
-        $query = http_build_query( $data );
-        if( !empty( $data['term'] ) ) {
-            $url = 'https://api.500px.com/v1/photos/search?' .$query. '&consumer_key=' .$this->consumer_key;
-        } else {
-            $url = 'https://api.500px.com/v1/photos?' .$query. '&consumer_key=' .$this->consumer_key;
-        }
-
-        $response = wp_remote_get( $url );
-
-        $data = json_decode( $response['body'], true );
-
-        if( !empty( $data['photos'] ) ) {
-            return $data['photos'];
-        } else {
-            return apply_filters( 'fivehundred_shortcode_no_results', 'No photos meet your criteria.' );
-        }
+        return apply_filters( 'fivehundred_shortcode_contents', $output, $photos );
     }
 }
 
