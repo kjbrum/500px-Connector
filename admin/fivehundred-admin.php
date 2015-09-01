@@ -14,15 +14,15 @@ class FiveHundred_Admin {
             'path' => plugin_dir_path( __FILE__ )
         );
 
-        $this->consumer_key = get_option( 'fivehundred_consumer_key' );
-
         // Set the default layout if one hasn't been choosen
         if( !get_option( 'fivehundred_default_layout' ) ) {
             update_option( 'fivehundred_default_layout', 'image-title' );
         }
 
+        $this->consumer_key = get_option( 'fivehundred_consumer_key' );
         $this->default_layout = get_option( 'fivehundred_default_layout' );
         $this->default_layout_custom = get_option( 'fivehundred_default_layout_custom' );
+        $this->remove_nsfw = get_option( 'fivehundred_remove_nsfw' );
 
 
         // Create our plugin page
@@ -74,7 +74,7 @@ class FiveHundred_Admin {
      *  @return  void
      */
     public function create_general_page() { ?>
-        <div class="wrap fivehundred-wrap">
+        <div class="wrap">
             <h2>500px Connector</h2>
 
             <?php
@@ -84,7 +84,7 @@ class FiveHundred_Admin {
             ?>
             <h3 class="title">Authorization</h3>
             <p>Enter your consumer key to authorize with the 500px API. Need a consumer key? <a href="https://500px.com/settings/applications" target="_blank">Register Here</a></p>
-            <form  method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data">
                 <?php wp_nonce_field( 'fivehundred-credential-authorization' ); ?>
                 <table class="form-table">
                     <tbody>
@@ -110,7 +110,7 @@ class FiveHundred_Admin {
             ?>
             <h3 class="title">Default Layout</h3>
             <p>Set the default layout to use for widgets and shortcodes.</p>
-            <form class="default-layout-form" method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" class="default-layout-form">
                 <?php wp_nonce_field( 'fivehundred-default-layout' ); ?>
                 <table class="form-table">
                     <tbody>
@@ -152,6 +152,31 @@ class FiveHundred_Admin {
                                     <p>Custom</p>
                                     <textarea name="default_layout_custom" id="default_layout_custom"><?php echo $layout_custom; ?></textarea>
                                 </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <?php submit_button( 'Save' ) ?>
+            </form>
+
+            <hr>
+
+            <?php
+                // Check if the settings form has been submitted
+                $this->handle_default_settings_form_submission();
+                $remove_nsfw = $this->remove_nsfw;
+            ?>
+            <h3 class="title">Settings</h3>
+            <p>Default settings to use for widgets and shortcodes.</p>
+            <form method="post" enctype="multipart/form-data" class="default-settings-form">
+                <?php wp_nonce_field( 'fivehundred-default-settings' ); ?>
+                <table class="form-table">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><label for="remove_nsfw">Remove NSFW material?</label></th>
+                            <td>
+                                <input type="checkbox" id="remove_nsfw" name="remove_nsfw" <?php echo ($remove_nsfw)?'checked="checked"':''; ?>>
                             </td>
                         </tr>
                     </tbody>
@@ -264,6 +289,38 @@ class FiveHundred_Admin {
             } else {
                 echo '<div id="message" class="error notice is-dismissible">
                     <p>There was an error while updating the custom default layout.</p>
+                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                </div>';
+            }
+        }
+    }
+
+    /**
+     *  Handle saving the default settings
+     *
+     *  @return  void
+     */
+    public function handle_default_settings_form_submission() {
+        $remove_nsfw = $this->remove_nsfw;
+
+        // Update default_layout value
+        if( isset( $_POST['remove_nsfw'] ) && ( $layout != $_POST['remove_nsfw'] ) ) {
+            // Check for nonce
+            check_admin_referer( 'fivehundred-default-settings' );
+
+            // Update the default layout option
+            $updated = update_option( 'fivehundred_remove_nsfw', $_POST['remove_nsfw'] );
+            $this->remove_nsfw = get_option( 'fivehundred_remove_nsfw' );
+
+            // Check for saving errors
+            if( $updated ) {
+                echo '<div id="message" class="updated notice is-dismissible">
+                    <p>Default settings have been updated.</p>
+                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                </div>';
+            } else {
+                echo '<div id="message" class="error notice is-dismissible">
+                    <p>There was an error while updating the default settings.</p>
                     <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
                 </div>';
             }
