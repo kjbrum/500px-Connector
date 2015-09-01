@@ -24,14 +24,17 @@ class FiveHundred {
             'path' => plugin_dir_path( __FILE__ )
         );
 
-        $this->consumer_key = get_option( 'fivehundred_consumer_key' );
-
         // Set the default layout if one hasn't been choosen
         if( !get_option( 'fivehundred_default_layout' ) ) {
             update_option( 'fivehundred_default_layout', 'image-title' );
         }
 
+        $this->consumer_key = get_option( 'fivehundred_consumer_key' );
         $this->default_layout = get_option( 'fivehundred_default_layout' );
+        $this->default_layout_custom = get_option( 'fivehundred_default_layout_custom' );
+        $this->default_layout_custom_css = get_option( 'fivehundred_default_layout_custom_css' );
+        $this->remove_nsfw = get_option( 'fivehundred_remove_nsfw' );
+        $this->default_exclude_categories = get_option( 'fivehundred_default_exclude_categories' );
 
 
         // Require the the goods
@@ -47,10 +50,21 @@ class FiveHundred {
 
         // Create our plugin page
         add_action( 'widgets_init', array( $this, 'register_feed_widget' ) );
+
+        // Add default custom layout CSS
+        if( !empty( $this->default_layout_custom_css ) ) {
+            add_action( 'wp_head', array( $this, 'add_custom_css' ) );
+        }
     }
 
     public function register_feed_widget() {
         register_widget( 'FiveHundred_Widget' );
+    }
+
+    public function add_custom_css() {
+        $output = "<style>$this->default_layout_custom_css</style>";
+
+        echo $output;
     }
 }
 

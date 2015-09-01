@@ -22,6 +22,7 @@ class FiveHundred_Admin {
         $this->consumer_key = get_option( 'fivehundred_consumer_key' );
         $this->default_layout = get_option( 'fivehundred_default_layout' );
         $this->default_layout_custom = get_option( 'fivehundred_default_layout_custom' );
+        $this->default_layout_custom_css = get_option( 'fivehundred_default_layout_custom_css' );
         $this->remove_nsfw = get_option( 'fivehundred_remove_nsfw' );
         $this->default_exclude_categories = get_option( 'fivehundred_default_exclude_categories' );
 
@@ -108,12 +109,13 @@ class FiveHundred_Admin {
                 $this->handle_default_layout_form_submission();
                 $layout = $this->default_layout;
                 $layout_custom = $this->default_layout_custom;
+                $layout_custom_css = $this->default_layout_custom_css;
             ?>
             <h3 class="title">Default Layout</h3>
             <p>Set the default layout to use for widgets and shortcodes.</p>
             <form method="post" enctype="multipart/form-data" class="default-layout-form">
                 <?php wp_nonce_field( 'fivehundred-default-layout' ); ?>
-                <table class="form-table">
+                <table>
                     <tbody>
                         <tr>
                             <td>
@@ -150,8 +152,16 @@ class FiveHundred_Admin {
                             <td colspan="4">
                                 <input type="radio" id="default_layout[custom-layout]" name="default_layout" value="custom-layout" <?php echo ($layout == 'custom-layout')?'checked="checked"':''; ?>>
                                 <label for="default_layout[custom-layout]">
-                                    <p>Custom</p>
-                                    <textarea name="default_layout_custom" id="default_layout_custom"><?php echo stripslashes( $layout_custom ); ?></textarea>
+                                    <div class="width-50">
+                                        <p>Custom Layout</p>
+                                        <textarea name="default_layout_custom" id="default_layout_custom"><?php echo stripslashes( $layout_custom ); ?></textarea>
+                                    </div>
+
+                                    <div class="width-50">
+                                        <p>Custom CSS</p>
+                                        <textarea name="default_layout_custom_css" id="default_layout_custom_css"><?php echo stripslashes( $layout_custom_css ); ?></textarea>
+                                    </div>
+
                                 </label>
                             </td>
                         </tr>
@@ -301,6 +311,7 @@ class FiveHundred_Admin {
     public function handle_default_layout_form_submission() {
         $layout = $this->default_layout;
         $layout_custom = $this->default_layout_custom;
+        $layout_custom_css = $this->default_layout_custom_css;
 
         // Update default_layout value
         if( isset( $_POST['default_layout'] ) && ( $layout != $_POST['default_layout'] ) ) {
@@ -343,6 +354,29 @@ class FiveHundred_Admin {
             } else {
                 echo '<div id="message" class="error notice is-dismissible">
                     <p>There was an error while updating the custom default layout.</p>
+                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                </div>';
+            }
+        }
+
+        // Update default_layout_custom_css value
+        if( isset( $_POST['default_layout_custom_css'] ) && ( $layout_custom_css != $_POST['default_layout_custom_css'] ) ) {
+            // Check for nonce
+            check_admin_referer( 'fivehundred-default-layout' );
+
+            // Update the default layout option
+            $updated_custom = update_option( 'fivehundred_default_layout_custom_css', $_POST['default_layout_custom_css'] );
+            $this->default_layout_custom_css = get_option( 'fivehundred_default_layout_custom_css' );
+
+            // Check for saving errors
+            if( $updated_custom ) {
+                echo '<div id="message" class="updated notice is-dismissible">
+                    <p>Custom default layout CSS has been updated.</p>
+                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                </div>';
+            } else {
+                echo '<div id="message" class="error notice is-dismissible">
+                    <p>There was an error while updating the custom default layout CSS.</p>
                     <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
                 </div>';
             }
