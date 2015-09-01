@@ -23,6 +23,7 @@ class FiveHundred_Admin {
         $this->default_layout = get_option( 'fivehundred_default_layout' );
         $this->default_layout_custom = get_option( 'fivehundred_default_layout_custom' );
         $this->remove_nsfw = get_option( 'fivehundred_remove_nsfw' );
+        $this->default_exclude_categories = get_option( 'fivehundred_default_exclude_categories' );
 
 
         // Create our plugin page
@@ -80,7 +81,7 @@ class FiveHundred_Admin {
             <?php
                 // Check if the consumer key form has been submitted
                 $this->handle_consumer_key_form_submission();
-                $key = $this->consumer_key;
+                $consumer_key = $this->consumer_key;
             ?>
             <h3 class="title">Authorization</h3>
             <p>Enter your consumer key to authorize with the 500px API. Need a consumer key? <a href="https://500px.com/settings/applications" target="_blank">Register Here</a></p>
@@ -91,7 +92,7 @@ class FiveHundred_Admin {
                         <tr>
                             <th scope="row"><label for="consumer_key">Consumer Key:</label></th>
                             <td>
-                                <input type="text" id="consumer_key" name="consumer_key" <?php echo ($key)?'value="'.$key.'"':''; ?> style="width: 350px">
+                                <input type="text" id="consumer_key" name="consumer_key" <?php echo ($consumer_key)?'value="'.$consumer_key.'"':''; ?> style="width: 350px">
                             </td>
                         </tr>
                     </tbody>
@@ -100,7 +101,7 @@ class FiveHundred_Admin {
                 <?php submit_button( 'Connect' ) ?>
             </form>
 
-            <hr>
+            <br><hr><br>
 
             <?php
                 // Check if the layout form has been submitted
@@ -160,12 +161,13 @@ class FiveHundred_Admin {
                 <?php submit_button( 'Save' ) ?>
             </form>
 
-            <hr>
+            <br><hr><br>
 
             <?php
                 // Check if the settings form has been submitted
                 $this->handle_default_settings_form_submission();
                 $remove_nsfw = $this->remove_nsfw;
+                $default_exclude_categories = $this->default_exclude_categories;
             ?>
             <h3 class="title">Settings</h3>
             <p>Default settings to use for widgets and shortcodes.</p>
@@ -174,9 +176,52 @@ class FiveHundred_Admin {
                 <table class="form-table">
                     <tbody>
                         <tr>
-                            <th scope="row"><label for="remove_nsfw">Remove NSFW material?</label></th>
+                            <th scope="row"><label for="remove_nsfw">NSFW</label></th>
                             <td>
-                                <input type="checkbox" id="remove_nsfw" name="remove_nsfw" <?php echo ($remove_nsfw)?'checked="checked"':''; ?>>
+                                <input type="checkbox" id="remove_nsfw" name="remove_nsfw" <?php echo ($remove_nsfw)?'checked="checked"':''; ?>> Remove material that isn't safe for work (nudity, gore, etc...)
+                            </td>
+                        </tr>
+                        <?php
+                            $categories = array(
+                                'Uncategorized',
+                                'Abstract',
+                                'Animals',
+                                'Black and White',
+                                'Celebrities',
+                                'City and Architecture',
+                                'Commercial',
+                                'Concert',
+                                'Family',
+                                'Fashion',
+                                'Film',
+                                'Fine Art',
+                                'Food',
+                                'Journalism',
+                                'Landscapes',
+                                'Macro',
+                                'Nature',
+                                'Nude',
+                                'People',
+                                'Performing Arts',
+                                'Sport',
+                                'Still Life',
+                                'Street',
+                                'Transportation',
+                                'Travel',
+                                'Underwater',
+                                'Urban Exploration',
+                                'Wedding'
+                            );
+                        ?>
+
+                        <tr>
+                            <th scope="row"><label for="default_exclude_categories">Exclude Categories</label></th>
+                            <td>
+                                <select multiple id="default_exclude_categories" name="default_exclude_categories[]">
+                                    <?php foreach( $categories as $category ) : ?>
+                                        <option value="<?php echo $category; ?>" <?php echo (!empty($default_exclude_categories) && in_array($category, $default_exclude_categories))?'selected="selected"':''; ?>><?php echo $category; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </td>
                         </tr>
                     </tbody>
@@ -195,35 +240,44 @@ class FiveHundred_Admin {
      *  @return  void
      */
     public function handle_consumer_key_form_submission() {
-        $key = $this->consumer_key;
+        $consumer_key = $this->consumer_key;
 
         // Remove consumer key if empty
-        if( !isset( $_POST['consumer_key'] ) && !$key ) {
-            if( !empty($key) ) {
-                update_option('fivehundred_consumer_key', '' );
+        if( !isset( $_POST['consumer_key'] ) && !$consumer_key ) {
+            if( !empty( $consumer_key ) ) {
 
+                // Update the consumer key option
+                $updated_key = update_option( 'fivehundred_consumer_key', '' );
                 $this->consumer_key = get_option( 'fivehundred_consumer_key' );
 
-                echo '<div id="message" class="updated notice is-dismissible">
-                    <p>Consumer key has been updated.</p>
-                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
-                </div>';
+                // Check for saving errors
+                if( $updated_key ) {
+                    echo '<div id="message" class="updated notice is-dismissible">
+                        <p>Consumer key has been updated.</p>
+                        <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                    </div>';
+                } else {
+                    echo '<div id="message" class="error notice is-dismissible">
+                        <p>There was an error while updating the consumer key.</p>
+                        <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                    </div>';
+                }
 
                 return;
             }
         }
 
         // Check if a consumer key has been changed
-        if( isset( $_POST['consumer_key'] ) && ( $key != $_POST['consumer_key'] ) ) {
+        if( isset( $_POST['consumer_key'] ) && ( $consumer_key != $_POST['consumer_key'] ) ) {
             // Check for nonce
             check_admin_referer( 'fivehundred-credential-authorization' );
 
             // Update the consumer key option
-            $updated = update_option( 'fivehundred_consumer_key', $_POST['consumer_key'] );
+            $updated_key = update_option( 'fivehundred_consumer_key', $_POST['consumer_key'] );
             $this->consumer_key = get_option( 'fivehundred_consumer_key' );
 
             // Check for saving errors
-            if( $updated ) {
+            if( $updated_key ) {
                 echo '<div id="message" class="updated notice is-dismissible">
                     <p>Consumer key has been updated.</p>
                     <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
@@ -302,15 +356,39 @@ class FiveHundred_Admin {
      */
     public function handle_default_settings_form_submission() {
         $remove_nsfw = $this->remove_nsfw;
+        $default_exclude_categories = $this->default_exclude_categories;
 
-        // Update default_layout value
-        if( isset( $_POST['remove_nsfw'] ) && ( $layout != $_POST['remove_nsfw'] ) ) {
+        // Update nsfw value
+        if( isset( $_POST['remove_nsfw'] ) && ( $remove_nsfw != $_POST['remove_nsfw'] ) ) {
             // Check for nonce
             check_admin_referer( 'fivehundred-default-settings' );
 
-            // Update the default layout option
-            $updated = update_option( 'fivehundred_remove_nsfw', $_POST['remove_nsfw'] );
+            // Update the remove_nsfw option
+            $updated_nsfw = update_option( 'fivehundred_remove_nsfw', $_POST['remove_nsfw'] );
             $this->remove_nsfw = get_option( 'fivehundred_remove_nsfw' );
+
+            // Check for saving errors
+            if( $updated_nsfw ) {
+                echo '<div id="message" class="updated notice is-dismissible">
+                    <p>Default settings have been updated.</p>
+                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                </div>';
+            } else {
+                echo '<div id="message" class="error notice is-dismissible">
+                    <p>There was an error while updating the nsfw setting.</p>
+                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                </div>';
+            }
+        }
+
+        // Update nsfw value
+        if( isset( $_POST['default_exclude_categories'] ) && ( $default_exclude_categories != $_POST['default_exclude_categories'] ) ) {
+            // Check for nonce
+            check_admin_referer( 'fivehundred-default-settings' );
+
+            // Update the default_exclude_categories option
+            $updated = update_option( 'fivehundred_default_exclude_categories', $_POST['default_exclude_categories'] );
+            $this->default_exclude_categories = get_option( 'fivehundred_default_exclude_categories' );
 
             // Check for saving errors
             if( $updated ) {
@@ -320,7 +398,7 @@ class FiveHundred_Admin {
                 </div>';
             } else {
                 echo '<div id="message" class="error notice is-dismissible">
-                    <p>There was an error while updating the default settings.</p>
+                    <p>There was an error while updating the default exclude categories.</p>
                     <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
                 </div>';
             }
