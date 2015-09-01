@@ -1,0 +1,34 @@
+/**
+ *  Styles for the admin area
+ */
+
+.default-layout-form img {
+    max-width: 100%;
+    display: block;
+}
+
+.default-layout-form p {
+    padding-bottom: 10px;
+}
+
+.default-layout-form input[type=radio] {
+    display: none;
+}
+
+.default-layout-form input[type=radio] + label {
+    display: block;
+    border: 1px solid transparent;
+    padding: 5px 16px 16px;
+    border-radius: 3px;
+}
+
+.default-layout-form input[type=radio] + label:hover,
+.default-layout-form input[type=radio]:checked + label {
+    background: #dedede;
+}
+
+.default-layout-form .custom-layout textarea {
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+}
