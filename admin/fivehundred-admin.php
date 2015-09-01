@@ -151,7 +151,7 @@ class FiveHundred_Admin {
                                 <input type="radio" id="default_layout[custom-layout]" name="default_layout" value="custom-layout" <?php echo ($layout == 'custom-layout')?'checked="checked"':''; ?>>
                                 <label for="default_layout[custom-layout]">
                                     <p>Custom</p>
-                                    <textarea name="default_layout_custom" id="default_layout_custom"><?php echo $layout_custom; ?></textarea>
+                                    <textarea name="default_layout_custom" id="default_layout_custom"><?php echo stripslashes( $layout_custom ); ?></textarea>
                                 </label>
                             </td>
                         </tr>
