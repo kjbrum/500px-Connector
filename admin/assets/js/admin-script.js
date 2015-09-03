@@ -2,10 +2,8 @@
  *  JavaScript for the admin area
  */
 
-$ = jQuery.noConflict();
+// $ = jQuery.noConflict();
 
-(function($) {
-
-    console.log('admin js!');
-
-})($);
+// (function($) {
+//     console.log('admin js!');
+// })($);

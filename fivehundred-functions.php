@@ -60,7 +60,7 @@ function fivehundred_build_output( $photos ) {
             break;
         case "custom-layout":
             $output .= "<div class='fivehundred--items'>";
-                foreach($photos as $photo) {
+                foreach( $photos as $photo ) {
                     $replace = array(
                         '{{name}}'             => $photo['name'],
                         '{{description}}'      => $photo['description'],
@@ -93,6 +93,7 @@ function fivehundred_build_output( $photos ) {
                         $replace['{{author.followers}}'] = '';
                     }
 
+                    // Add in the needed content
                     $item = strtr( $layout_custom, $replace );
 
                     // Build $output with custom layout here

@@ -118,14 +118,25 @@ class FiveHundred_Admin {
                 <table>
                     <tbody>
                         <tr>
-                            <td>
-                                <input type="radio" id="default_layout[image-title]" name="default_layout" value="image-title" <?php echo ($layout == 'image-title')?'checked="checked"':''; ?>>
-                                <label for="default_layout[image-title]">
-                                    <p>Image / Title</p>
-                                    <img src="<?php echo $this->settings['url']; ?>/assets/images/layout1.png" alt="layout1">
-                                </label>
-                            </td>
-                            <td>
+                            <?php
+                                $layouts = array(
+                                    'image-title' => 'Image / Title',
+                                    'image-title-date' => 'Image / Title / Date',
+                                    'image-title-author' => 'Image / Title / Author',
+                                    'image-author-date' => 'Image / Author / Date',
+                                );
+                            ?>
+
+                            <?php foreach( $layouts as $key => $val ) : ?>
+                                <td>
+                                    <input type="radio" id="default_layout[<?php echo $key; ?>]" name="default_layout" value="<?php echo $key; ?>" <?php echo ($layout == $key)?'checked="checked"':''; ?>>
+                                    <label for="default_layout[<?php echo $key; ?>]">
+                                        <p><?php echo $val; ?></p>
+                                        <img src="<?php echo $this->settings['url']; ?>/assets/images/<?php echo $key; ?>.png" alt="<?php echo $key; ?>">
+                                    </label>
+                                </td>
+                            <?php endforeach; ?>
+                            <!-- <td>
                                 <input type="radio" id="default_layout[image-title-date]" name="default_layout" value="image-title-date"  <?php echo ($layout == 'image-title-date')?'checked="checked"':''; ?>>
                                 <label for="default_layout[image-title-date]">
                                     <p>Image / Title / Date</p>
@@ -145,7 +156,7 @@ class FiveHundred_Admin {
                                     <p>Image / Author / Date</p>
                                     <img src="<?php echo $this->settings['url']; ?>/assets/images/layout4.png" alt="layout4">
                                 </label>
-                            </td>
+                            </td> -->
                         </tr>
 
                         <tr class="custom-layout">

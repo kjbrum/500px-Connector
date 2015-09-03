@@ -41,6 +41,15 @@ class FiveHundred_Shortcodes {
             unset( $atts['exclude_categories'] );
         }
 
+        // Check if nsfw content is removed by default
+        if( get_option( 'fivehundred_remove_nsfw' ) ) {
+            if( !empty( $atts['exclude'] ) ) {
+                $atts['exclude'] = $atts['exclude'].',Nude';
+            } else {
+                $atts['exclude'] = 'Nude';
+            }
+        }
+
         if( !empty( $atts['username'] ) ) {
             $atts['feature'] = 'user';
         }
