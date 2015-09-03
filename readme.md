@@ -21,7 +21,7 @@
 - Find a better way to use a single array of values throughout the plugin
 - Go through and make sure the plugin is secure (should write a blog post on this)
 - Allow users to be able to create/save multiple custom layouts
-
+- [Deploy to WP plugin repo](https://github.com/benbalter/Github-to-WordPress-Plugin-Directory-Deployment-Script/blob/master/deploy.sh)
 
 ### Notes
 
