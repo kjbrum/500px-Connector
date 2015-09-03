@@ -58,7 +58,7 @@ function fivehundred_build_output( $photos ) {
                 }
             $output .= '</div>';
             break;
-        case "custom-layout":
+        case "custom":
             $output .= "<div class='fivehundred--items'>";
                 foreach( $photos as $photo ) {
                     $replace = array(

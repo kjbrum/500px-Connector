@@ -111,68 +111,52 @@ class FiveHundred_Admin {
                 $layout_custom = $this->default_layout_custom;
                 $layout_custom_css = $this->default_layout_custom_css;
             ?>
-            <h3 class="title">Default Layout</h3>
+            <h3 class="title">Layout</h3>
             <p>Set the default layout to use for widgets and shortcodes.</p>
             <form method="post" enctype="multipart/form-data" class="default-layout-form">
                 <?php wp_nonce_field( 'fivehundred-default-layout' ); ?>
-                <table>
+                <table class="form-table">
                     <tbody>
                         <tr>
-                            <?php
-                                $layouts = array(
-                                    'image-title' => 'Image / Title',
-                                    'image-title-date' => 'Image / Title / Date',
-                                    'image-title-author' => 'Image / Title / Author',
-                                    'image-author-date' => 'Image / Author / Date',
-                                );
-                            ?>
+                            <th scope="row"><label for="default_layout">Default Layout:</label></th>
+                            <td>
+                                <?php
+                                    $layouts = array(
+                                        'image-title'        => 'Image / Title (default)',
+                                        'image-title-date'   => 'Image / Title / Date',
+                                        'image-title-author' => 'Image / Title / Author',
+                                        'image-author-date'  => 'Image / Author / Date',
+                                        'custom'             => 'Custom',
+                                    );
+                                ?>
+                                <select name="default_layout" id="default_layout">
+                                    <?php foreach( $layouts as $key => $val ) : ?>
+                                        <option id="default_layout[<?php echo $key; ?>]" name="default_layout" value="<?php echo $key; ?>" <?php echo ($layout == $key)?'selected="selected"':''; ?>>
+                                            <?php echo $val; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                            <?php foreach( $layouts as $key => $val ) : ?>
-                                <td>
-                                    <input type="radio" id="default_layout[<?php echo $key; ?>]" name="default_layout" value="<?php echo $key; ?>" <?php echo ($layout == $key)?'checked="checked"':''; ?>>
-                                    <label for="default_layout[<?php echo $key; ?>]">
-                                        <p><?php echo $val; ?></p>
-                                        <img src="<?php echo $this->settings['url']; ?>/assets/images/<?php echo $key; ?>.png" alt="<?php echo $key; ?>">
-                                    </label>
-                                </td>
-                            <?php endforeach; ?>
-                            <!-- <td>
-                                <input type="radio" id="default_layout[image-title-date]" name="default_layout" value="image-title-date"  <?php echo ($layout == 'image-title-date')?'checked="checked"':''; ?>>
-                                <label for="default_layout[image-title-date]">
-                                    <p>Image / Title / Date</p>
-                                    <img src="<?php echo $this->settings['url']; ?>/assets/images/layout2.png" alt="layout2">
+                <table class="form-table">
+                    <tbody>
+                        <tr class="custom-layout">
+                            <td>
+                                <label for="default_layout_custom">
+                                    <p>Custom Layout</p>
+                                    <textarea name="default_layout_custom" id="default_layout_custom"><?php echo stripslashes( $layout_custom ); ?></textarea>
                                 </label>
                             </td>
-                            <td>
-                                <input type="radio" id="default_layout[image-title-author]" name="default_layout" value="image-title-author"  <?php echo ($layout == 'image-title-author')?'checked="checked"':''; ?>>
-                                <label for="default_layout[image-title-author]">
-                                    <p>Image / Title / Author</p>
-                                    <img src="<?php echo $this->settings['url']; ?>/assets/images/layout3.png" alt="layout3">
-                                </label>
-                            </td>
-                            <td>
-                                <input type="radio" id="default_layout[image-author-date]" name="default_layout" value="image-author-date"  <?php echo ($layout == 'image-author-date')?'checked="checked"':''; ?>>
-                                <label for="default_layout[image-author-date]">
-                                    <p>Image / Author / Date</p>
-                                    <img src="<?php echo $this->settings['url']; ?>/assets/images/layout4.png" alt="layout4">
-                                </label>
-                            </td> -->
                         </tr>
 
-                        <tr class="custom-layout">
-                            <td colspan="4">
-                                <input type="radio" id="default_layout[custom-layout]" name="default_layout" value="custom-layout" <?php echo ($layout == 'custom-layout')?'checked="checked"':''; ?>>
-                                <label for="default_layout[custom-layout]">
-                                    <div class="width-50">
-                                        <p>Custom Layout</p>
-                                        <textarea name="default_layout_custom" id="default_layout_custom"><?php echo stripslashes( $layout_custom ); ?></textarea>
-                                    </div>
-
-                                    <div class="width-50">
-                                        <p>Custom CSS</p>
-                                        <textarea name="default_layout_custom_css" id="default_layout_custom_css"><?php echo stripslashes( $layout_custom_css ); ?></textarea>
-                                    </div>
-
+                        <tr>
+                            <td>
+                                <label for="default_layout_custom_css">
+                                    <p>Custom CSS</p>
+                                    <textarea name="default_layout_custom_css" id="default_layout_custom_css"><?php echo stripslashes( $layout_custom_css ); ?></textarea>
                                 </label>
                             </td>
                         </tr>
