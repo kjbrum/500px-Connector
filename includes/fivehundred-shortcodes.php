@@ -84,7 +84,7 @@ class FiveHundred_Shortcodes {
             return $photos;
         } else {
             $output = fivehundred_build_output( $photos );
-            return apply_filters( 'fivehundred_shortcode_contents', $output, $photos );
+            return $output;
         }
     }
 }

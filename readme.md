@@ -8,10 +8,6 @@
 
 ### Filters/Actions
 
-`fivehundred_shortcode_item_contents`
-
-`fivehundred_shortcode_contents`
-
 `fivehundred_shortcode_no_results`
 
 
@@ -24,6 +20,7 @@
 - Add some JS for showing/hiding certain fields when certain fields are filled, as well as setting values (i.e. username="kjbrum" => feature="user", hide "search" field)
 - Find a better way to use a single array of values throughout the plugin
 - Go through and make sure the plugin is secure (should write a blog post on this)
+- Allow users to be able to create/save multiple custom layouts
 
 
 ### Notes

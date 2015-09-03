@@ -103,8 +103,8 @@ function fivehundred_build_output( $photos ) {
                     // Add in the needed content
                     $item = strtr( $layout_custom, $replace );
 
-                    // Build $output with custom layout here
-                    $output .= apply_filters( 'fivehundred_shortcode_item_contents', $item, $photo );
+                    // Add the item to $output
+                    $output .= $item;
                 }
             $output .= '</div>';
             break;
