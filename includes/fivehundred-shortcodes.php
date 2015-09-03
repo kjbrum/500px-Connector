@@ -4,7 +4,12 @@
  */
 class FiveHundred_Shortcodes {
     function __construct() {
-        $this->consumer_key = get_option( 'fivehundred_consumer_key' );
+        $this->consumer_key               = get_option( 'fivehundred_consumer_key' );
+        $this->default_layout             = get_option( 'fivehundred_default_layout' );
+        $this->default_layout_custom      = get_option( 'fivehundred_default_layout_custom' );
+        $this->default_layout_custom_css  = get_option( 'fivehundred_default_layout_custom_css' );
+        $this->remove_nsfw                = get_option( 'fivehundred_remove_nsfw' );
+        $this->default_exclude_categories = get_option( 'fivehundred_default_exclude_categories' );
 
         /**
          * Add the SVG shortcode
@@ -74,9 +79,13 @@ class FiveHundred_Shortcodes {
 
         $photos = fivehundred_query_photos( array_filter( $atts ) );
 
-        $output = fivehundred_build_output( $photos );
-
-        return apply_filters( 'fivehundred_shortcode_contents', $output, $photos );
+        // Check for any errors
+        if( is_string( $photos ) ) {
+            return $photos;
+        } else {
+            $output = fivehundred_build_output( $photos );
+            return apply_filters( 'fivehundred_shortcode_contents', $output, $photos );
+        }
     }
 }
 

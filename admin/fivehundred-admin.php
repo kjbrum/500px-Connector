@@ -14,18 +14,12 @@ class FiveHundred_Admin {
             'path' => plugin_dir_path( __FILE__ )
         );
 
-        // Set the default layout if one hasn't been choosen
-        if( !get_option( 'fivehundred_default_layout' ) ) {
-            update_option( 'fivehundred_default_layout', 'image-title' );
-        }
-
-        $this->consumer_key = get_option( 'fivehundred_consumer_key' );
-        $this->default_layout = get_option( 'fivehundred_default_layout' );
-        $this->default_layout_custom = get_option( 'fivehundred_default_layout_custom' );
-        $this->default_layout_custom_css = get_option( 'fivehundred_default_layout_custom_css' );
-        $this->remove_nsfw = get_option( 'fivehundred_remove_nsfw' );
+        $this->consumer_key               = get_option( 'fivehundred_consumer_key' );
+        $this->default_layout             = get_option( 'fivehundred_default_layout' );
+        $this->default_layout_custom      = get_option( 'fivehundred_default_layout_custom' );
+        $this->default_layout_custom_css  = get_option( 'fivehundred_default_layout_custom_css' );
+        $this->remove_nsfw                = get_option( 'fivehundred_remove_nsfw' );
         $this->default_exclude_categories = get_option( 'fivehundred_default_exclude_categories' );
-
 
         // Create our plugin page
         add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
@@ -38,11 +32,11 @@ class FiveHundred_Admin {
      */
     public function add_settings_page() {
         $options_page = add_options_page(
-            '500px Connector',
+            '500px Connector Settings',
             '500px Connector',
             'manage_options',
-            'fivehundred-general',
-            array( $this, 'create_general_page' )
+            'fivehundred-settings',
+            array( $this, 'create_settings_page' )
         );
 
         add_action( 'load-'.$options_page, array( $this, 'load_admin_assets' ) );
@@ -75,7 +69,7 @@ class FiveHundred_Admin {
      *
      *  @return  void
      */
-    public function create_general_page() { ?>
+    public function create_settings_page() { ?>
         <div class="wrap">
             <h2>500px Connector</h2>
 
@@ -122,7 +116,7 @@ class FiveHundred_Admin {
                             <td>
                                 <?php
                                     $layouts = array(
-                                        'image-title'        => 'Image / Title (default)',
+                                        'image-title'        => 'Image / Title',
                                         'image-title-date'   => 'Image / Title / Date',
                                         'image-title-author' => 'Image / Title / Author',
                                         'image-author-date'  => 'Image / Author / Date',
@@ -183,7 +177,7 @@ class FiveHundred_Admin {
                         <tr>
                             <th scope="row"><label for="remove_nsfw">NSFW</label></th>
                             <td>
-                                <input type="checkbox" id="remove_nsfw" name="remove_nsfw" <?php echo ($remove_nsfw)?'checked="checked"':''; ?>> Remove material that isn't safe for work (nudity, gore, etc...)
+                                <input type="checkbox" id="remove_nsfw" name="remove_nsfw" <?php echo ($remove_nsfw)?'checked="checked"':''; ?>> Remove material that isn't safe for work (nudity)
                             </td>
                         </tr>
                         <?php
@@ -219,6 +213,7 @@ class FiveHundred_Admin {
                             );
                         ?>
 
+                        <?php /*
                         <tr>
                             <th scope="row"><label for="default_exclude_categories">Exclude Categories</label></th>
                             <td>
@@ -229,6 +224,7 @@ class FiveHundred_Admin {
                                 </select>
                             </td>
                         </tr>
+                        */ ?>
                     </tbody>
                 </table>
 

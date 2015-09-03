@@ -3,6 +3,13 @@
  * 500px Connector functions
  */
 
+/**
+ *  Build the HTML string for the photo feed
+ *
+ *  @param   array   $photos  The array of photos from 500px
+ *
+ *  @return  string           The HTML string for displaying the photo feed
+ */
 function fivehundred_build_output( $photos ) {
     $layout = get_option( 'fivehundred_default_layout' );
     $layout_custom = get_option( 'fivehundred_default_layout_custom' );
@@ -106,8 +113,20 @@ function fivehundred_build_output( $photos ) {
     return $output;
 }
 
+/**
+ *  Query the desired photos from 500px
+ *
+ *  @param   array  $parameters  An associative array for the request query
+ *
+ *  @return  array               The array of photos from 500px
+ */
 function fivehundred_query_photos( $parameters ) {
     $consumer_key = get_option( 'fivehundred_consumer_key' );
+
+    // Make sure the user has entered their consumer key
+    if( !$consumer_key ) {
+        return '<p>Error: You need to add your <a href="'.admin_url( 'options-general.php?page=fivehundred-settings' ).'">500px consumer key</a>.</p>';
+    }
 
     $query = http_build_query( $parameters );
     if( !empty( $parameters['term'] ) ) {
@@ -119,6 +138,10 @@ function fivehundred_query_photos( $parameters ) {
     $response = wp_remote_get( $url );
 
     $data = json_decode( $response['body'], true );
+
+    if( !empty( $data['error'] ) ) {
+        return '<p>Error: '.$data['error'].'</p>';
+    }
 
     if( !empty( $data['photos'] ) ) {
         return $data['photos'];

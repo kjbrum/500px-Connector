@@ -29,13 +29,12 @@ class FiveHundred {
             update_option( 'fivehundred_default_layout', 'image-title' );
         }
 
-        $this->consumer_key = get_option( 'fivehundred_consumer_key' );
-        $this->default_layout = get_option( 'fivehundred_default_layout' );
-        $this->default_layout_custom = get_option( 'fivehundred_default_layout_custom' );
-        $this->default_layout_custom_css = get_option( 'fivehundred_default_layout_custom_css' );
-        $this->remove_nsfw = get_option( 'fivehundred_remove_nsfw' );
+        $this->consumer_key               = get_option( 'fivehundred_consumer_key' );
+        $this->default_layout             = get_option( 'fivehundred_default_layout' );
+        $this->default_layout_custom      = get_option( 'fivehundred_default_layout_custom' );
+        $this->default_layout_custom_css  = get_option( 'fivehundred_default_layout_custom_css' );
+        $this->remove_nsfw                = get_option( 'fivehundred_remove_nsfw' );
         $this->default_exclude_categories = get_option( 'fivehundred_default_exclude_categories' );
-
 
         // Require the the goods
         require_once( 'includes/fivehundred-shortcodes.php' );
