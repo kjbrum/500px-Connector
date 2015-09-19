@@ -117,7 +117,7 @@
             // Add a button that opens a window
             ed.addButton('fivehundred', {
                 text: '500px',
-                // image: plugin_settings.url + 'assets/images/500px.png',
+                // image: url + '/../images/500px.png',
                 // icon: true,
                 tooltip: 'Add a 500px photo stream shortcode',
                 cmd: 'btnPopup'

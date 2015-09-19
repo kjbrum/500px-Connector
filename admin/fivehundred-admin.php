@@ -28,8 +28,8 @@ class FiveHundred_Admin {
         add_filter( 'mce_css', array( $this, 'custom_tinymce_styles' ) );
 
         // Pass PHP value to our TinyMCE JavaScript file
-        add_action( 'admin_head-post.php', array( $this, 'share_php_values_with_tinymce' ) );
-        add_action( 'admin_head-post-new.php', array( $this, 'share_php_values_with_tinymce' ) );
+        // add_action( 'admin_head-post.php', array( $this, 'share_php_values_with_tinymce' ) );
+        // add_action( 'admin_head-post-new.php', array( $this, 'share_php_values_with_tinymce' ) );
 
         // Create our plugin page
         add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
