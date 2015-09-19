@@ -21,17 +21,23 @@ class FiveHundred_Admin {
         $this->remove_nsfw                = get_option( 'fivehundred_remove_nsfw' );
         $this->default_exclude_categories = get_option( 'fivehundred_default_exclude_categories' );
 
-        // Create our plugin page
-        add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
-
         // Add TinyMCE button for adding a shortcode
-        add_filter( 'mce_external_plugins', array( $this, 'register_tinymce_javascript') );
-        add_filter( 'mce_buttons', array( $this, 'register_tinymce_buttons') );
+        add_action( 'init', array( $this, 'initialize_editor_buttons' ) );
+
+        // Add styles for the button
         add_filter( 'mce_css', array( $this, 'custom_tinymce_styles' ) );
 
         // Pass PHP value to our TinyMCE JavaScript file
         add_action( 'admin_head-post.php', array( $this, 'share_php_values_with_tinymce' ) );
         add_action( 'admin_head-post-new.php', array( $this, 'share_php_values_with_tinymce' ) );
+
+        // Create our plugin page
+        add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+    }
+
+    function initialize_editor_buttons() {
+        add_filter( 'mce_external_plugins', array( $this, 'register_tinymce_javascript') );
+        add_filter( 'mce_buttons', array( $this, 'register_tinymce_buttons') );
     }
 
     function custom_tinymce_styles( $mce_css ) {
