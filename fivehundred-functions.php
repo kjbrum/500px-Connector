@@ -10,16 +10,21 @@
  *
  *  @return  string           The HTML string for displaying the photo feed
  */
-function fivehundred_build_output( $photos ) {
+function fivehundred_build_output( $photos, $heading='' ) {
     $layout = get_option( 'fivehundred_default_layout' );
     $layout_custom = get_option( 'fivehundred_default_layout_custom' );
     $layout_custom = stripslashes( $layout_custom );
 
     $output = '';
 
-    switch ($layout) {
-        case "image-title":
-            $output .= "<div class='fivehundred--items'>";
+    $output .= "<div class='fivehundred--items'>";
+
+        if( $heading ) {
+            $output .= "<div class='fivehundred--heading'>".$heading."</div>";
+        }
+
+        switch ($layout) {
+            case "image-title":
                 foreach($photos as $photo) {
                     $item = "<a href='http://500px.com/{$photo['url']}' class='fivehundred--item' target='_blank'>";
                         $item .= "<img src='{$photo['image_url']}' class='fivehundred--item__image'>";
@@ -27,10 +32,8 @@ function fivehundred_build_output( $photos ) {
                     $item .= '</a>';
                     $output .= apply_filters( 'fivehundred_shortcode_item_contents', $item, $photo );
                 }
-            $output .= '</div>';
-            break;
-        case "image-title-date":
-            $output .= "<div class='fivehundred--items'>";
+                break;
+            case "image-title-date":
                 foreach($photos as $photo) {
                     $item = "<a href='http://500px.com/{$photo['url']}' class='fivehundred--item' target='_blank'>";
                         $item .= "<img src='{$photo['image_url']}' class='fivehundred--item__image'>";
@@ -39,10 +42,8 @@ function fivehundred_build_output( $photos ) {
                     $item .= '</a>';
                     $output .= apply_filters( 'fivehundred_shortcode_item_contents', $item, $photo );
                 }
-            $output .= '</div>';
-            break;
-        case "image-title-author":
-            $output .= "<div class='fivehundred--items'>";
+                break;
+            case "image-title-author":
                 foreach($photos as $photo) {
                     $item = "<a href='http://500px.com/{$photo['url']}' class='fivehundred--item' target='_blank'>";
                         $item .= "<img src='{$photo['image_url']}' class='fivehundred--item__image'>";
@@ -51,10 +52,8 @@ function fivehundred_build_output( $photos ) {
                     $item .= '</a>';
                     $output .= apply_filters( 'fivehundred_shortcode_item_contents', $item, $photo );
                 }
-            $output .= '</div>';
-            break;
-        case "image-author-date":
-            $output .= "<div class='fivehundred--items'>";
+                break;
+            case "image-author-date":
                 foreach($photos as $photo) {
                     $item = "<a href='http://500px.com/{$photo['url']}' class='fivehundred--item' target='_blank'>";
                         $item .= "<img src='{$photo['image_url']}' class='fivehundred--item__image'>";
@@ -63,10 +62,8 @@ function fivehundred_build_output( $photos ) {
                     $item .= '</a>';
                     $output .= apply_filters( 'fivehundred_shortcode_item_contents', $item, $photo );
                 }
-            $output .= '</div>';
-            break;
-        case "custom":
-            $output .= "<div class='fivehundred--items'>";
+                break;
+            case "custom":
                 foreach( $photos as $photo ) {
                     $replace = array(
                         '{{name}}'             => $photo['name'],
@@ -106,9 +103,10 @@ function fivehundred_build_output( $photos ) {
                     // Add the item to $output
                     $output .= $item;
                 }
-            $output .= '</div>';
-            break;
-    }
+                break;
+        }
+
+    $output .= '</div>';
 
     return $output;
 }

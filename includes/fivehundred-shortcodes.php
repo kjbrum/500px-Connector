@@ -83,7 +83,7 @@ class FiveHundred_Shortcodes {
         if( is_string( $photos ) ) {
             return $photos;
         } else {
-            $output = fivehundred_build_output( $photos );
+            $output = fivehundred_build_output( $photos, $atts['heading'] );
             return $output;
         }
     }
