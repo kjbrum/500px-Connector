@@ -3,7 +3,7 @@
 
         var popupBody = [
             {
-                type: 'label', text: 'This form allows you to easily add a 500px photo feed shortcode.'
+                type: 'label', text: 'Easily add a 500px photo stream shortcode.'
             },
             {
                 type: 'textbox', name: 'heading', label: 'Heading:'
@@ -138,7 +138,7 @@
             text: '500px',
             // image: plugin_settings.url + 'assets/images/500px.png',
             // icon: true,
-            tooltip: 'Add a 500px photo feed shortcode',
+            tooltip: 'Add a 500px photo stream shortcode',
             onclick: function() {
                 // Open window
                 editor.windowManager.open({
