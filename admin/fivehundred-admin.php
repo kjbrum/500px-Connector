@@ -23,6 +23,40 @@ class FiveHundred_Admin {
 
         // Create our plugin page
         add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+
+        // Add TinyMCE button for adding a shortcode
+        add_filter( 'mce_external_plugins', array( $this, 'register_tinymce_javascript') );
+        add_filter( 'mce_buttons', array( $this, 'register_tinymce_buttons') );
+        add_filter( 'mce_css', array( $this, 'custom_tinymce_styles' ) );
+
+        // Pass PHP value to our TinyMCE JavaScript file
+        add_action( 'admin_head-post.php', array( $this, 'share_php_values_with_tinymce' ) );
+        add_action( 'admin_head-post-new.php', array( $this, 'share_php_values_with_tinymce' ) );
+    }
+
+    function custom_tinymce_styles( $mce_css ) {
+        $mce_css .= ', ' . $this->settings['url'] . 'assets/css/mce-style.css';
+        return $mce_css;
+    }
+
+    function register_tinymce_javascript( $plugins ) {
+       $plugins['fivehundred'] = $this->settings['url'] . 'assets/js/mce-script.js';
+       return $plugins;
+    }
+
+    function register_tinymce_buttons( $buttons ) {
+       array_push($buttons, 'fivehundred');
+       return $buttons;
+    }
+
+    function share_php_values_with_tinymce() { ?>
+        <script type='text/javascript'>
+            var plugin_settings = {
+                'url': '<?php echo $this->settings["url"]; ?>',
+                'path': '<?php echo $this->settings["path"]; ?>'
+            };
+        </script>
+        <?php
     }
 
     /**
