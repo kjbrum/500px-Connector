@@ -106,7 +106,7 @@
                     label: 'Sort Direction:',
                     'values': [
                         {text: 'Descending (default)', value: ''},
-                        {text: 'Ascending', value: 'ascending'}
+                        {text: 'Ascending', value: 'asc'}
                     ]
                 },
                 {
