@@ -13,6 +13,7 @@
 
 ### To-Do
 
+- Use [Chosen](https://harvesthq.github.io/chosen/) for the TinyMCE shortcode adding
 - Add in some filters and actions to make it more extensible
 - Allow the user to set default options for widgets and shortcodes
 - Make a list of what options can be used, and what can be used together (i.e. feature="user", username="kjbrum")
